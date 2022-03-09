@@ -84,5 +84,5 @@ function Asteroid:render()
         end
     end
     love.graphics.polygon("line", drawnPoints)
-    --love.graphics.rectangle('line', self.x, self.y, self.width, self.width)
+    love.graphics.rectangle('line', self.x, self.y, self.width, self.width)
 end
