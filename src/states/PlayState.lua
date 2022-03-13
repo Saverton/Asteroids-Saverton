@@ -22,13 +22,19 @@ function PlayState:enter()
             dy = -parent_asteroid.dx * 1.5,
             size = parent_asteroid.size - 1
         }))
-        Event.dispatch('explode', {x = parent_asteroid.x, y = parent_asteroid.y})
     end)
 
     self.explosions = {}
     Event.on('explode', function(def)
-        table.insert(self.explosions, self:genExplosion(def.x, def.y))
-        self.explosions[#self.explosions]:emit(30)
+        table.insert(self.explosions, self:genExplosion(def.x, def.y, def.size * 10))
+        self.explosions[#self.explosions]:emit(def.size * 10)
+    end)
+
+    Event.on('next_level', function(def)
+        self.level = Level({
+            levelNum = def.level,
+            player = self.player
+        })
     end)
 end
 
@@ -52,13 +58,12 @@ function PlayState:update(dt)
     end
 end
 
-function PlayState:genExplosion(x, y)
-    local explosion = love.graphics.newParticleSystem(gTextures['particle'], 30)
+function PlayState:genExplosion(x, y, n)
+    local explosion = love.graphics.newParticleSystem(gTextures['particle'], n)
     explosion:setPosition(x, y)
     explosion:setParticleLifetime(0.5, 1)
-    --explosion:setSpeed(30, 50)
-    --explosion:setDirection(2 * math.pi)
-    explosion:setEmissionArea('normal', 3, 3, 2 * math.pi)
+    explosion:setLinearAcceleration(-40, -40, 40, 40)
+    explosion:setEmissionArea('normal', 3, 3)
     return explosion
 end
 

@@ -46,7 +46,7 @@ function Spaceship:update(dt)
     if self.canShoot and love.keyboard.wasPressed('space') then
         self:shoot()
         self.canShoot = false
-        Timer.after(0.5, function() self.canShoot = true end)
+        Timer.after(0.25, function() self.canShoot = true end)
     end
 
     for k, bullet in pairs(self.bullets) do
