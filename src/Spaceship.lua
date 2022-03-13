@@ -85,7 +85,7 @@ function Spaceship:render()
     if not self.dead then
         love.graphics.polygon('line', self.points)
     end
-    love.graphics.rectangle('line', self.x - self.width / 2, self.y - self.height / 2, self.width, self.height)
+    --love.graphics.rectangle('line', self.x - self.width / 2, self.y - self.height / 2, self.width, self.height)
     for k, bullet in pairs(self.bullets) do
         bullet:render()
     end
