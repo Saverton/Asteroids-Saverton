@@ -3,7 +3,7 @@ Spaceship = Class{}
 function Spaceship:init()
     local originX = VIRTUAL_WIDTH / 2
     local originY = VIRTUAL_HEIGHT / 2
-    self.speed = PLAYER_SPEED
+    self.speed = 0
     self.x = originX
     self.y = originY
     self.width = PLAYER_WIDTH
@@ -16,7 +16,7 @@ function Spaceship:init()
         originX + math.cos(self.dir + (4 * math.pi / 3)) * 4,
         originY + math.sin(self.dir + (4 * math.pi / 3)) * 4,
     }
-    self.dr = PLAYER_DIR_SPEED
+    self.dr = 0
     self.bullets = {}
     self.canShoot = true
     self.dead = false
@@ -26,20 +26,45 @@ function Spaceship:update(dt)
     local updatePos = false
 
     if love.keyboard.isDown('left') then
-        self.dir = (self.dir - self.dr * dt) % math.rad(360)
-        updatePos = true
+        self.dr = math.min(self.dr + PLAYER_DIR_ACCELERATION * dt, PLAYER_DIR_SPEED)
     elseif love.keyboard.isDown('right') then
-        self.dir = (self.dir + self.dr * dt) % math.rad(360)
+        self.dr = math.max(self.dr - PLAYER_DIR_ACCELERATION * dt, -PLAYER_DIR_SPEED)
+    elseif self.dr > 0 then
+        self.dr = math.max(self.dr - PLAYER_DIR_ACCELERATION * dt, 0)
+    elseif self.dr < 0 then
+        self.dr = math.min(self.dr + PLAYER_DIR_ACCELERATION * dt, 0)
+    end
+
+    if self.dr ~= 0 then
+        self.dir = (self.dir - self.dr * dt) % math.rad(360)
         updatePos = true
     end
 
     if love.keyboard.isDown('up') then
+        self.speed = math.min(self.speed + PLAYER_ACCELERATION * dt, PLAYER_SPEED)
+    elseif love.keyboard.isDown('down') then
+        self.speed = math.max(self.speed - PLAYER_ACCELERATION * dt, -PLAYER_SPEED)
+    elseif self.speed > 0 then
+        self.speed = math.max(self.speed - PLAYER_ACCELERATION / 2 * dt, 0)
+    elseif self.speed < 0 then
+        self.speed = math.min(self.speed + PLAYER_ACCELERATION / 2 * dt, 0)
+    end
+
+    if self.speed ~= 0 then
         self.x = self.x + math.floor(math.cos(self.dir) * self.speed) * dt
         self.y = self.y + math.floor(math.sin(self.dir) * self.speed) * dt
-        updatePos = true
-    elseif love.keyboard.isDown('down') then
-        self.x = self.x - math.floor(math.cos(self.dir) * self.speed) * dt
-        self.y = self.y - math.floor(math.sin(self.dir) * self.speed) * dt
+        --player loops edges
+        if self.x < -self.width then
+            self.x = VIRTUAL_WIDTH
+        elseif self.x > VIRTUAL_WIDTH then
+            self.x = -self.width
+        end
+    
+        if self.y < -self.height then
+            self.y = VIRTUAL_HEIGHT
+        elseif self.y > VIRTUAL_HEIGHT then
+            self.y = -self.height
+        end
         updatePos = true
     end
 
@@ -56,8 +81,6 @@ function Spaceship:update(dt)
     if updatePos then
         self:updatePosition()
     end
-
-    Timer.update(dt)
 end
 
 function Spaceship:updatePosition()

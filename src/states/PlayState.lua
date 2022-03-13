@@ -26,8 +26,8 @@ function PlayState:enter()
 
     self.explosions = {}
     Event.on('explode', function(def)
-        table.insert(self.explosions, self:genExplosion(def.x, def.y, def.size * 10))
-        self.explosions[#self.explosions]:emit(def.size * 10)
+        table.insert(self.explosions, self:genExplosion(def.x, def.y, def.size))
+        self.explosions[#self.explosions]:emit(def.size)
     end)
 
     Event.on('next_level', function(def)

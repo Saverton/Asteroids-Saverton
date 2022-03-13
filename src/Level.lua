@@ -3,6 +3,8 @@ Level = Class{}
 function Level:init(def)
     self.levelNum = def.levelNum or 1
     self.player = def.player
+    self.player.x = VIRTUAL_WIDTH / 2
+    self.player.y = VIRTUAL_HEIGHT / 2
     self:spawnAsteroids()
 end
 
@@ -21,10 +23,13 @@ end
 function Level:update(dt)
     for k, asteroid in pairs(self.asteroids) do
         asteroid:update(dt)
-        if self.player:collides(asteroid) then
+        if not self.player.dead and self.player:collides(asteroid) then
             -- player dies
             self.player.dead = true
-            GlobalStateMachine:change('play')
+            Event.dispatch('explode', {x = self.player.x, y = self.player.y, size = 20})
+            Timer.after(1, function()
+                GlobalStateMachine:change('play')
+            end)
         end
         for j, bullet in pairs(self.player.bullets) do
             if bullet:collides(asteroid) then
@@ -33,13 +38,17 @@ function Level:update(dt)
                     Event.dispatch('split-asteroid', asteroid)
                 end
                 table.remove(self.asteroids, k)
-                Event.dispatch('explode', {x = asteroid.x + asteroid.size / 2, y = asteroid.y + asteroid.size / 2, size = asteroid.size})
+                Event.dispatch('explode', {x = asteroid.x + asteroid.size / 2, y = asteroid.y + asteroid.size / 2, size = asteroid.size * 10})
                 if #self.asteroids == 0 then
-                    Event.dispatch('next_level', {level = self.levelNum + 1})
+                    Timer.after(1, function()
+                        Event.dispatch('next_level', {level = self.levelNum + 1})
+                    end)
                 end
             end
         end
     end
+
+    Timer.update(dt)
 end
 
 function Level:render()
