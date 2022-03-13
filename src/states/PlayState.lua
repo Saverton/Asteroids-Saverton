@@ -23,6 +23,8 @@ function PlayState:enter()
             size = parent_asteroid.size - 1
         }))
     end)
+
+    self.explosions = {}
 end
 
 function PlayState:update(dt)
@@ -36,6 +38,10 @@ function PlayState:update(dt)
     if love.keyboard.wasPressed('escape') then
         love.event.quit()
     end
+end
+
+function PlayState:genExplosion(x, y)
+    local explosion = love.graphics.newParticleSystem()
 end
 
 function PlayState:render()

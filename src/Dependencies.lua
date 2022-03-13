@@ -24,7 +24,7 @@ GlobalStateMachine = StateMachine({
 })
 
 gTextures = {
-    ['spaceship'] = love.graphics.newImage('graphics/spaceship.png')
+    ['particle'] = love.graphics.newImage('graphics/particle.png')
 }
 
 gSounds = {
