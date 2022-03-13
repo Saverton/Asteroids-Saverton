@@ -49,14 +49,14 @@ function Spaceship:collides(target)
     local x = self.x - self.size / 2
     local y = self.y - self.size / 2
     return not (x + self.size < target.x or x > target.x + target.width or
-                y + self.size < target.y or y > target.x + target.height)
+                y + self.size < target.y or y > target.y + target.height)
 end
 
 function Spaceship:render()
     if not self.dead then
         love.graphics.draw(gTextures['spaceship'], self.x, self.y, (self.dir + math.rad(90)) % math.rad(360), 1, 1, self.size / 2, self.size / 2)
     end
-    love.graphics.rectangle('line', self.x - self.size / 2, self.y - self.size / 2, self.size, self.size)
+    --love.graphics.rectangle('line', self.x - self.size / 2, self.y - self.size / 2, self.size, self.size)
     for k, bullet in pairs(self.bullets) do
         bullet:render()
     end

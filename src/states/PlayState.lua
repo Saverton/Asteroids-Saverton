@@ -11,15 +11,15 @@ function PlayState:enter()
         table.insert(self.level.asteroids, Asteroid({
             x = parent_asteroid.x,
             y = parent_asteroid.y,
-            dx = -parent_asteroid.dy,
-            dy = parent_asteroid.dx,
+            dx = -parent_asteroid.dy * 1.5,
+            dy = parent_asteroid.dx * 1.5,
             size = parent_asteroid.size - 1
         }))
         table.insert(self.level.asteroids, Asteroid({
             x = parent_asteroid.x,
             y = parent_asteroid.y,
-            dx = parent_asteroid.dy,
-            dy = -parent_asteroid.dx,
+            dx = parent_asteroid.dy * 1.5,
+            dy = -parent_asteroid.dx * 1.5,
             size = parent_asteroid.size - 1
         }))
     end)

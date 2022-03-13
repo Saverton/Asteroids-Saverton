@@ -19,7 +19,7 @@ end
 
 function Projectile:collides(target)
     return not (self.x < target.x or self.x > target.x + target.width or
-                self.y < target.y or self.y > target.x + target.height)
+                self.y < target.y or self.y > target.y + target.height)
 end
 
 function Projectile:render()

@@ -4,32 +4,39 @@ function Asteroid:init(def)
     self.size = def.size
     self.x = def.x or 0
     self.y = def.y or 0
-    self.dx = def.dx or math.random(2) == 1 and -math.random(5, 50) or math.random(5, 50)
-    self.dy = def.dy or math.random(2) == 1 and -math.random(5, 50) or math.random(5, 50)
+    self.dx = def.dx or math.random(2) == 1 and -math.random(5, 25) or math.random(5, 25)
+    self.dy = def.dy or math.random(2) == 1 and -math.random(5, 25) or math.random(5, 25)
     self.width = def.size * 16
     self.height = def.size * 16
     self.sides = 8
     self:genShape()
-    
-    --[[ readjust size for hitbox purposes
-    local max = self.points[1]
-    local min = self.points[1]
-    for i = 3, 15, 2 do
-        max = math.max(max, self.points[i])
-        min = math.min(min, self.points[i])
-    end
-    self.x = self.x + min
-    self.width = max - min
 
-    max = self.points[2]
-    min = self.points[2]
-    for i = 4, 16, 2 do
-        max = math.max(max, self.points[i])
-        min = math.min(min, self.points[i])
+    --readjust size for more accurate hitboxes confined to the polgyon
+    local maxX = self.points[1]
+    local minX = self.points[1]
+    for i = 3, 15, 2 do
+        maxX = math.max(maxX, self.points[i])
+        minX = math.min(minX, self.points[i])
     end
-    self.y = self.y + min
-    self.height = max - min
-    ]]
+    self.x = self.x + minX
+    self.width = maxX - minX
+
+    for i = 1, 15, 2 do
+        self.points[i] = self.points[i] - minX
+    end
+
+    local maxY = self.points[2]
+    local minY = self.points[2]
+    for i = 4, 16, 2 do
+        maxY = math.max(maxY, self.points[i])
+        minY = math.min(minY, self.points[i])
+    end
+    self.y = self.y + minY
+    self.height = maxY - minY
+
+    for i = 2, 16, 2 do
+        self.points[i] = self.points[i] - minY
+    end
 end
 
 function Asteroid:genShape()
@@ -84,5 +91,5 @@ function Asteroid:render()
         end
     end
     love.graphics.polygon("line", drawnPoints)
-    love.graphics.rectangle('line', self.x, self.y, self.width, self.width)
+    --love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
 end
