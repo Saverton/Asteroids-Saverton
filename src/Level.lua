@@ -3,8 +3,6 @@ Level = Class{}
 function Level:init(def)
     self.levelNum = def.levelNum or 1
     self.player = def.player
-    self.player.x = VIRTUAL_WIDTH / 2
-    self.player.y = VIRTUAL_HEIGHT / 2
     self:spawnAsteroids()
     self.ufo = nil
     Timer.every(math.max(11 - self.levelNum, 2), function()
@@ -22,11 +20,15 @@ function Level:spawnAsteroids()
     local num_of_asteroids = math.random(math.floor(3 + self.levelNum / 3), math.floor(4 + self.levelNum / 3))
     self.asteroids = {}
     for i = 1, num_of_asteroids, 1 do
-        table.insert(self.asteroids, Asteroid({
-            size = ASTEROID_BIG,
-            x = math.random(2) == 1 and math.random(0, 50) or math.random(VIRTUAL_WIDTH - 50, VIRTUAL_WIDTH),
-            y = math.random(2) == 1 and math.random(0, 40) or math.random(VIRTUAL_HEIGHT - 40, VIRTUAL_HEIGHT)
-        }))
+        local asteroid
+        repeat
+            asteroid = Asteroid({
+                size = ASTEROID_BIG,
+                x = math.random(2) == 1 and math.random(0, 50) or math.random(VIRTUAL_WIDTH - 50, VIRTUAL_WIDTH),
+                y = math.random(2) == 1 and math.random(0, 40) or math.random(VIRTUAL_HEIGHT - 40, VIRTUAL_HEIGHT)
+            })
+        until not self.player:collides(asteroid)
+        table.insert(self.asteroids, asteroid)
     end
 end
 
