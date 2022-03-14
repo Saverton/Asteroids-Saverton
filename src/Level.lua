@@ -28,12 +28,13 @@ function Level:update(dt)
             self.player.dead = true
             Event.dispatch('explode', {x = self.player.x, y = self.player.y, size = 20})
             Timer.after(1, function()
-                GlobalStateMachine:change('play')
+                self.player:dies()
             end)
         end
         for j, bullet in pairs(self.player.bullets) do
             if bullet:collides(asteroid) then
                 table.remove(self.player.bullets, j)
+                self.player.score = self.player.score + asteroid.size * 100
                 if asteroid.size > 1 then
                     Event.dispatch('split-asteroid', asteroid)
                 end
@@ -57,4 +58,8 @@ function Level:render()
     end
     love.graphics.setFont(gFonts['large'])
     love.graphics.printf(tostring(self.levelNum), 0, 5, VIRTUAL_WIDTH, "center")
+end
+
+function Level:getLevelNum()
+    return (self.levelNum)
 end

@@ -36,6 +36,13 @@ function PlayState:enter()
             player = self.player
         })
     end)
+
+    Event.on('reset_level', function()
+        self.level = Level({
+            levelNum = self.level:getLevelNum(),
+            player = self.player
+        })
+    end)
 end
 
 function PlayState:update(dt)

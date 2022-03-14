@@ -17,23 +17,17 @@ function Button:isPressed()
 end
 
 function Button:containsMouse()
-    if CursorCollides(self.x, self.y, self.width, self.height) then
-        return true
-    else
-        return false
-    end
+    return CursorCollides(self.x, self.y, self.width, self.height)
 end
 
-function Button:render(alpha)
-    local a = alpha or 1
+function Button:render()
     if self:containsMouse() then
-        love.graphics.setColor(255, 0, 0, a)
-    else
-        love.graphics.setColor(255, 255, 255, a)
+        love.graphics.setColor(1, 0, 0, 1)
     end
     love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
+    love.graphics.setFont(gFonts['medium'])
     love.graphics.printf(self.text, 0, self.y + math.max(self.height - 16, 2), VIRTUAL_WIDTH, 'center')
-    love.graphics.setColor(255, 255, 255, a)
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function Button:setText(text)

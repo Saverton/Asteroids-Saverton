@@ -18,3 +18,8 @@ function generateQuads(atlas, tileWidth, tileHeight, startTile, counterMax)
     ::finish::
     return quads
 end
+
+function CursorCollides(x, y, w, h)
+    local mx, my = push:toGame(love.mouse.getPosition())
+    return mx ~= nil and my ~= nil and not (mx < x or mx > x + w or my < y or my > y + h)
+end

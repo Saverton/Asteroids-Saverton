@@ -21,7 +21,7 @@ function love.load()
 
     love.graphics.setFont(gFonts['large'])
 
-    GlobalStateMachine:change('play', {
+    GlobalStateMachine:change('start', {
     })
 
     love.keyboard.keysPressed = {}

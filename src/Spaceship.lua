@@ -20,6 +20,8 @@ function Spaceship:init()
     self.bullets = {}
     self.canShoot = true
     self.dead = false
+    self.lives = 1
+    self.score = 0
 end
 
 function Spaceship:update(dt)
@@ -104,6 +106,19 @@ function Spaceship:collides(target)
                 y + self.height < target.y or y > target.y + target.height)
 end
 
+function Spaceship:dies()
+    if self.lives > 0 then
+        self.lives = self.lives - 1
+        self.dead = false
+        self.x = VIRTUAL_WIDTH / 2
+        self.y = VIRTUAL_HEIGHT / 2
+        self:updatePosition()
+        Event.dispatch('reset_level')
+    else
+        GlobalStateMachine:change('game-over', {score = self.score})
+    end
+end
+
 function Spaceship:render()
     if not self.dead then
         love.graphics.polygon('line', self.points)
@@ -112,4 +127,7 @@ function Spaceship:render()
     for k, bullet in pairs(self.bullets) do
         bullet:render()
     end
+
+    love.graphics.setFont(gFonts['medium'])
+    love.graphics.printf(tostring(self.score), 5, 5, VIRTUAL_WIDTH - 5, 'left')
 end
