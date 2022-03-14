@@ -27,6 +27,7 @@ function Level:update(dt)
             -- player dies
             self.player.dead = true
             Event.dispatch('explode', {x = self.player.x, y = self.player.y, size = 20})
+            gSounds['ship_explode']:play()
             Timer.after(1, function()
                 self.player:dies()
             end)
@@ -39,6 +40,8 @@ function Level:update(dt)
                     Event.dispatch('split-asteroid', asteroid)
                 end
                 table.remove(self.asteroids, k)
+                gSounds['asteroid_explode']:stop()
+                gSounds['asteroid_explode']:play()
                 Event.dispatch('explode', {x = asteroid.x + asteroid.size / 2, y = asteroid.y + asteroid.size / 2, size = asteroid.size * 10})
                 if #self.asteroids == 0 then
                     Timer.after(1, function()

@@ -24,6 +24,9 @@ function love.load()
     GlobalStateMachine:change('start', {
     })
 
+    gSounds['music']:setLooping(true)
+    gSounds['music']:play()
+    
     love.keyboard.keysPressed = {}
     MouseInput = {}
 end

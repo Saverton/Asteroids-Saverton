@@ -28,6 +28,10 @@ gTextures = {
 }
 
 gSounds = {
+    ['shoot'] = love.audio.newSource('sounds/ship_shoots.wav', 'static'),
+    ['asteroid_explode'] = love.audio.newSource('sounds/asteroid_explodes.wav', 'static'),
+    ['ship_explode'] = love.audio.newSource('sounds/ship_explodes.wav', 'static'),
+    ['music'] = love.audio.newSource('sounds/Free_Floating.mp3', 'static')
 }
 
 gFonts = {

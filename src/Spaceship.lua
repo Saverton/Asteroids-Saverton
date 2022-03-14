@@ -96,6 +96,8 @@ function Spaceship:updatePosition()
 end
 
 function Spaceship:shoot()
+    gSounds['shoot']:stop()
+    gSounds['shoot']:play()
     table.insert(self.bullets, Projectile(self.x, self.y, self.dir))
 end
 
@@ -130,4 +132,5 @@ function Spaceship:render()
 
     love.graphics.setFont(gFonts['medium'])
     love.graphics.printf(tostring(self.score), 5, 5, VIRTUAL_WIDTH - 5, 'left')
+    love.graphics.printf('LIVES: ' .. tostring(self.lives) .. ' ', 5, 5, VIRTUAL_WIDTH - 5, 'right')
 end
