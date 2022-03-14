@@ -27,9 +27,9 @@ end
 function Spaceship:update(dt)
     local updatePos = false
 
-    if love.keyboard.isDown('left') then
+    if love.keyboard.isDown('left') or love.keyboard.isDown('a') then
         self.dr = math.min(self.dr + PLAYER_DIR_ACCELERATION * dt, PLAYER_DIR_SPEED)
-    elseif love.keyboard.isDown('right') then
+    elseif love.keyboard.isDown('right') or love.keyboard.isDown('d') then
         self.dr = math.max(self.dr - PLAYER_DIR_ACCELERATION * dt, -PLAYER_DIR_SPEED)
     elseif self.dr > 0 then
         self.dr = math.max(self.dr - PLAYER_DIR_ACCELERATION * dt, 0)
@@ -42,9 +42,9 @@ function Spaceship:update(dt)
         updatePos = true
     end
 
-    if love.keyboard.isDown('up') then
+    if love.keyboard.isDown('up') or love.keyboard.isDown('w') then
         self.speed = math.min(self.speed + PLAYER_ACCELERATION * dt, PLAYER_SPEED)
-    elseif love.keyboard.isDown('down') then
+    elseif love.keyboard.isDown('down') or love.keyboard.isDown('s') then
         self.speed = math.max(self.speed - PLAYER_ACCELERATION * dt, -PLAYER_SPEED)
     elseif self.speed > 0 then
         self.speed = math.max(self.speed - PLAYER_ACCELERATION / 2 * dt, 0)
