@@ -11,6 +11,7 @@ require 'src/Asteroid'
 require 'src/Level'
 require 'src/Spaceship'
 require 'src/Projectile'
+require 'src/Ufo'
 
 require 'src/states/BaseState'
 require 'src/states/StartState'
@@ -24,13 +25,15 @@ GlobalStateMachine = StateMachine({
 })
 
 gTextures = {
-    ['particle'] = love.graphics.newImage('graphics/particle.png')
+    ['particle'] = love.graphics.newImage('graphics/particle.png'),
+    ['ufo'] = love.graphics.newImage('graphics/ufo.png')
 }
 
 gSounds = {
     ['shoot'] = love.audio.newSource('sounds/ship_shoots.wav', 'static'),
     ['asteroid_explode'] = love.audio.newSource('sounds/asteroid_explodes.wav', 'static'),
     ['ship_explode'] = love.audio.newSource('sounds/ship_explodes.wav', 'static'),
+    ['ufo_flies'] = love.audio.newSource('sounds/ufo_flies.wav', 'static'),
     ['music'] = love.audio.newSource('sounds/Free_Floating.mp3', 'static')
 }
 

@@ -6,6 +6,16 @@ function Level:init(def)
     self.player.x = VIRTUAL_WIDTH / 2
     self.player.y = VIRTUAL_HEIGHT / 2
     self:spawnAsteroids()
+    self.ufo = nil
+    Timer.every(math.max(11 - self.levelNum, 2), function()
+        if self.ufo == nil and math.random(3) == 1 then
+            self.ufo = Ufo({
+                target = self.player
+            })
+        end
+    end)
+    
+    gSounds['ufo_flies']:stop()
 end
 
 function Level:spawnAsteroids()
@@ -25,12 +35,7 @@ function Level:update(dt)
         asteroid:update(dt)
         if not self.player.dead and self.player:collides(asteroid) then
             -- player dies
-            self.player.dead = true
-            Event.dispatch('explode', {x = self.player.x, y = self.player.y, size = 20})
-            gSounds['ship_explode']:play()
-            Timer.after(1, function()
-                self.player:dies()
-            end)
+            Event.dispatch('player_dies')
         end
         for j, bullet in pairs(self.player.bullets) do
             if bullet:collides(asteroid) then
@@ -52,12 +57,27 @@ function Level:update(dt)
         end
     end
 
+    if self.ufo ~= nil then
+        self.ufo:update(dt)
+
+        for k, bullet in pairs(self.player.bullets) do
+            if not self.ufo.dead and bullet:collides(self.ufo) then
+                table.remove(self.player.bullets, k)
+                self.ufo:dies()
+                self.ufo = nil
+            end
+        end
+    end
+
     Timer.update(dt)
 end
 
 function Level:render()
     for k, asteroid in pairs(self.asteroids) do
         asteroid:render()
+    end
+    if self.ufo ~= nil then
+        self.ufo:render()
     end
     love.graphics.setFont(gFonts['large'])
     love.graphics.printf(tostring(self.levelNum), 0, 5, VIRTUAL_WIDTH, "center")

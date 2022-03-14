@@ -43,6 +43,15 @@ function PlayState:enter()
             player = self.player
         })
     end)
+
+    Event.on('player_dies', function()
+        self.player.dead = true
+        Event.dispatch('explode', {x = self.player.x, y = self.player.y, size = 20})
+        gSounds['ship_explode']:play()
+        Timer.after(1, function()
+            self.player:dies()
+        end)
+    end)
 end
 
 function PlayState:update(dt)
