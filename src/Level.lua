@@ -14,6 +14,7 @@ function Level:init(def)
     end)
     
     gSounds['ufo_flies']:stop()
+    Event.dispatch('player_invincible')
 end
 
 function Level:spawnAsteroids()
@@ -35,7 +36,7 @@ end
 function Level:update(dt)
     for k, asteroid in pairs(self.asteroids) do
         asteroid:update(dt)
-        if not self.player.dead and self.player:collides(asteroid) then
+        if not self.player.dead and not self.player.invincible and self.player:collides(asteroid) then
             -- player dies
             Event.dispatch('player_dies')
         end
@@ -63,7 +64,7 @@ function Level:update(dt)
         self.ufo:update(dt)
 
         for k, bullet in pairs(self.player.bullets) do
-            if not self.ufo.dead and bullet:collides(self.ufo) then
+            if not self.ufo.dead and not self.player.dead and not self.player.invincible and bullet:collides(self.ufo) then
                 table.remove(self.player.bullets, k)
                 self.ufo:dies()
                 self.ufo = nil

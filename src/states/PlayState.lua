@@ -52,6 +52,14 @@ function PlayState:enter()
             self.player:dies()
         end)
     end)
+
+    Event.on('player_invincible', function()
+        self.player.invincible = true
+        self.player.frameCount = 0
+        Timer.after(PLAYER_INVINCIBILITY_TIMER, function()
+            self.player.invincible = false
+        end)
+    end)
 end
 
 function PlayState:update(dt)

@@ -19,6 +19,8 @@ function Spaceship:init()
     self.dr = 0
     self.bullets = {}
     self.canShoot = true
+    self.invincible = false
+    self.frameCount = 0
     self.dead = false
     self.lives = 1
     self.score = 0
@@ -112,17 +114,15 @@ function Spaceship:dies()
     if self.lives > 0 then
         self.lives = self.lives - 1
         self.dead = false
-        self.x = VIRTUAL_WIDTH / 2
-        self.y = VIRTUAL_HEIGHT / 2
+        Event.dispatch('player_invincible')
         self:updatePosition()
-        Event.dispatch('reset_level')
     else
         GlobalStateMachine:change('game-over', {score = self.score})
     end
 end
 
 function Spaceship:render()
-    if not self.dead then
+    if not self.dead and not (self.invincible and self.frameCount % PLAYER_INVINCIBILITY_FLASH == 0) then
         love.graphics.polygon('line', self.points)
     end
     --love.graphics.rectangle('line', self.x - self.width / 2, self.y - self.height / 2, self.width, self.height)
@@ -133,4 +133,8 @@ function Spaceship:render()
     love.graphics.setFont(gFonts['medium'])
     love.graphics.printf(tostring(self.score), 5, 5, VIRTUAL_WIDTH - 5, 'left')
     love.graphics.printf('LIVES: ' .. tostring(self.lives) .. ' ', 5, 5, VIRTUAL_WIDTH - 5, 'right')
+
+    if self.invincible then
+        self.frameCount = self.frameCount + 1
+    end
 end
