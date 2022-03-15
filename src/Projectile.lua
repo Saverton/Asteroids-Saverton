@@ -1,12 +1,13 @@
 Projectile = Class{}
 
-function Projectile:init(x, y, dir)
-    self.x = x
-    self.y = y
-    self.dir = dir
+function Projectile:init(def)
+    self.x = def.x
+    self.y = def.y
+    self.dir = def.dir
     self.speed = BULLET_SPEED
     self.size = BULLET_SIZE
     self.lifetime = 0
+    self.looping = def.looping
 end
 
 function Projectile:update(dt)
@@ -14,14 +15,16 @@ function Projectile:update(dt)
     self.y = self.y + (math.sin(self.dir) * self.speed) * dt
     self.lifetime = self.lifetime + dt
 
-    if self.x < 0 then
-        self.x = VIRTUAL_WIDTH
-    elseif self.x > VIRTUAL_WIDTH then
-        self.x = 0
-    elseif self.y < 0 then
-        self.y = VIRTUAL_HEIGHT
-    elseif self.y > VIRTUAL_HEIGHT then
-        self.y = 0
+    if self.looping then
+        if self.x < 0 then
+            self.x = VIRTUAL_WIDTH
+        elseif self.x > VIRTUAL_WIDTH then
+            self.x = 0
+        elseif self.y < 0 then
+            self.y = VIRTUAL_HEIGHT
+        elseif self.y > VIRTUAL_HEIGHT then
+            self.y = 0
+        end
     end
 end
 
