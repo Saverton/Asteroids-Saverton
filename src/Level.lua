@@ -4,11 +4,15 @@ function Level:init(def)
     self.levelNum = def.levelNum or 1
     self.player = def.player
     self:spawnAsteroids()
-    self.ufo = nil
+    self.ufo = Ufo({
+        target = self.player,
+        dead = true
+    })
     Timer.every(math.max(11 - self.levelNum, 2), function()
-        if self.ufo == nil and math.random(3) == 1 then
+        if self.ufo.dead and math.random(3) == 1 then
             self.ufo = Ufo({
-                target = self.player
+                target = self.player,
+                dead = false
             })
         end
     end)
@@ -60,14 +64,13 @@ function Level:update(dt)
         end
     end
 
-    if self.ufo ~= nil then
+    if not self.ufo.dead then
         self.ufo:update(dt)
 
         for k, bullet in pairs(self.player.bullets) do
-            if not self.ufo.dead and not self.player.dead and not self.player.invincible and bullet:collides(self.ufo) then
+            if not self.player.dead and not self.player.invincible and bullet:collides(self.ufo) then
                 table.remove(self.player.bullets, k)
                 self.ufo:dies()
-                self.ufo = nil
                 break
             end
         end
@@ -80,9 +83,7 @@ function Level:render()
     for k, asteroid in pairs(self.asteroids) do
         asteroid:render()
     end
-    if self.ufo ~= nil then
-        self.ufo:render()
-    end
+    self.ufo:render()
     love.graphics.setFont(gFonts['large'])
     love.graphics.printf(tostring(self.levelNum), 0, 5, VIRTUAL_WIDTH, "center")
 end

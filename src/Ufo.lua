@@ -10,9 +10,9 @@ function Ufo:init(def)
     self.height = 16
     local dir_table = {-1, 1}
     self.dx = dir_table[math.random(1, 2)] * math.random(25, 50)
-    self.dy = dir_table[math.random(1, 2)] * (50 - self.dx)
+    self.dy = dir_table[math.random(1, 2)] * (50 - math.abs(self.dx))
     self.bullets = {}
-    self.dead = false
+    self.dead = def.dead or false
 
     Timer.every(UFO_SHOOT_EVERY, function()
         if not self.dead then
@@ -45,24 +45,28 @@ function Ufo:update(dt)
         end
     end
 
-    self.x = self.x + self.dx * dt
-    self.y = self.y + self.dy * dt
+    if not self.dead then
+        self.x = self.x + self.dx * dt
+        self.y = self.y + self.dy * dt
 
-    if self.x < -self.width then
-        self.x = VIRTUAL_WIDTH
-    elseif self.x > VIRTUAL_WIDTH then
-        self.x = -self.width
-    end
+        if self.x < -self.width then
+            self.x = VIRTUAL_WIDTH
+        elseif self.x > VIRTUAL_WIDTH then
+            self.x = -self.width
+        end
 
-    if self.y < -self.height then
-        self.y = VIRTUAL_HEIGHT
-    elseif self.y > VIRTUAL_HEIGHT then
-        self.y = -self.height
+        if self.y < -self.height then
+            self.y = VIRTUAL_HEIGHT
+        elseif self.y > VIRTUAL_HEIGHT then
+            self.y = -self.height
+        end
     end
 end
 
 function Ufo:render()
-    love.graphics.draw(gTextures[self.texture], math.floor(self.x), math.floor(self.y))
+    if not self.dead then
+        love.graphics.draw(gTextures[self.texture], math.floor(self.x), math.floor(self.y))
+    end
 
     for k, bullet in pairs(self.bullets) do
         bullet:render()
