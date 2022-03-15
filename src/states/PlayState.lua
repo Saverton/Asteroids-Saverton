@@ -7,7 +7,7 @@ function PlayState:enter()
         player = self.player
     })
 
-    Event.on('split-asteroid', function(parent_asteroid)
+    local splitHandler = Event.on('split-asteroid', function(parent_asteroid)
         table.insert(self.level.asteroids, Asteroid({
             x = parent_asteroid.x,
             y = parent_asteroid.y,
@@ -25,26 +25,26 @@ function PlayState:enter()
     end)
 
     self.explosions = {}
-    Event.on('explode', function(def)
+    local explosionHandler = Event.on('explode', function(def)
         table.insert(self.explosions, self:genExplosion(def.x, def.y, def.size))
         self.explosions[#self.explosions]:emit(def.size)
     end)
 
-    Event.on('next_level', function(def)
+    local nextLevelHandler = Event.on('next_level', function(def)
         self.level = Level({
             levelNum = def.level,
             player = self.player
         })
     end)
 
-    Event.on('reset_level', function()
+    local resetHandler = Event.on('reset_level', function()
         self.level = Level({
             levelNum = self.level:getLevelNum(),
             player = self.player
         })
     end)
 
-    Event.on('player_dies', function()
+    local deathHandler = Event.on('player_dies', function()
         self.player.dead = true
         Event.dispatch('explode', {x = self.player.x, y = self.player.y, size = 20})
         gSounds['ship_explode']:play()
@@ -53,13 +53,22 @@ function PlayState:enter()
         end)
     end)
 
-    Event.on('player_invincible', function()
+    local invincibleHandler = Event.on('player_invincible', function()
         self.player.invincible = true
         self.player.frameCount = 0
         Timer.after(PLAYER_INVINCIBILITY_TIMER, function()
             self.player.invincible = false
             self.player.canShoot = true
         end)
+    end)
+
+    Event.on('game_over', function()
+        splitHandler:remove()
+        explosionHandler:remove()
+        resetHandler:remove()
+        nextLevelHandler:remove()
+        deathHandler:remove()
+        invincibleHandler:remove()
     end)
 end
 
@@ -100,4 +109,6 @@ function PlayState:render()
     end
 end
 
-function PlayState:exit() end
+function PlayState:exit() 
+    Event.dispatch('game_over')
+end

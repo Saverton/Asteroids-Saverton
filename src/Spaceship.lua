@@ -91,12 +91,12 @@ function Spaceship:update(dt)
 end
 
 function Spaceship:updatePosition()
-    self.points = {self.x + math.cos(self.dir) * 8, 
-        self.y + math.sin(self.dir) * 8, 
-        self.x + math.cos(self.dir + (2 * math.pi / 3)) * 4,
-        self.y + math.sin(self.dir + (2 * math.pi / 3)) * 4,
-        self.x + math.cos(self.dir + (4 * math.pi / 3)) * 4,
-        self.y + math.sin(self.dir + (4 * math.pi / 3)) * 4,
+    self.points = {math.floor(self.x + math.cos(self.dir) * 8), 
+    math.floor(self.y + math.sin(self.dir) * 8), 
+    math.floor(self.x + math.cos(self.dir + (2 * math.pi / 3)) * 4),
+    math.floor(self.y + math.sin(self.dir + (2 * math.pi / 3)) * 4),
+    math.floor(self.x + math.cos(self.dir + (4 * math.pi / 3)) * 4),
+    math.floor(self.y + math.sin(self.dir + (4 * math.pi / 3)) * 4),
     }
 end
 

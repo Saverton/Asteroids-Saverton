@@ -85,11 +85,13 @@ function Asteroid:render()
     local drawnPoints = {}
     for i in pairs(self.points) do
         if i % 2 == 0 then
-            table.insert(drawnPoints, self.points[i] + self.y)
+            table.insert(drawnPoints, math.floor(self.points[i] + self.y))
         else
-            table.insert(drawnPoints, self.points[i] + self.x)
+            table.insert(drawnPoints, math.floor(self.points[i] + self.x))
         end
     end
     love.graphics.polygon("line", drawnPoints)
+
+    --hitboxes for debugging
     --love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
 end
