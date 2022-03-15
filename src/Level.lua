@@ -68,6 +68,7 @@ function Level:update(dt)
                 table.remove(self.player.bullets, k)
                 self.ufo:dies()
                 self.ufo = nil
+                break
             end
         end
     end
