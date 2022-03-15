@@ -9,7 +9,7 @@ function Ufo:init(def)
     self.width = 16
     self.height = 16
     local dir_table = {-1, 1}
-    self.dx = dir_table[math.random(1, 2)] * math.random(0, 50)
+    self.dx = dir_table[math.random(1, 2)] * math.random(25, 50)
     self.dy = dir_table[math.random(1, 2)] * (50 - self.dx)
     self.bullets = {}
     self.dead = false

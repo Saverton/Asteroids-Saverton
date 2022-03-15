@@ -80,9 +80,12 @@ function Spaceship:update(dt)
 
     for k, bullet in pairs(self.bullets) do
         bullet:update(dt)
+        if bullet:isDead() then
+            table.remove(self.bullets, k)
+        end
     end
 
-    if updatePos then
+    if not self.dead and updatePos then
         self:updatePosition()
     end
 end
@@ -114,6 +117,7 @@ function Spaceship:dies()
     if self.lives > 0 then
         self.lives = self.lives - 1
         self.dead = false
+        self.canShoot = false
         Event.dispatch('player_invincible')
         self:updatePosition()
     else

@@ -58,6 +58,7 @@ function PlayState:enter()
         self.player.frameCount = 0
         Timer.after(PLAYER_INVINCIBILITY_TIMER, function()
             self.player.invincible = false
+            self.player.canShoot = true
         end)
     end)
 end
