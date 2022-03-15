@@ -22,7 +22,7 @@ function Spaceship:init()
     self.invincible = false
     self.frameCount = 0
     self.dead = false
-    self.lives = 1
+    self.lives = 3
     self.score = 0
 end
 
