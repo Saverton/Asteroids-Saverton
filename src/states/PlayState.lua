@@ -99,3 +99,5 @@ function PlayState:render()
         love.graphics.draw(self.explosions[i], 0, 0)
     end
 end
+
+function PlayState:exit() end

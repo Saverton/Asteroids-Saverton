@@ -103,7 +103,7 @@ end
 function Spaceship:shoot()
     gSounds['shoot']:stop()
     gSounds['shoot']:play()
-    table.insert(self.bullets, Projectile({x = self.x,  y = self.y, dir = self.dir, looping = true}))
+    table.insert(self.bullets, Projectile({x = self.x,  y = self.y, dir = self.dir, looping = true, spd = PLAYER_BULLET_SPEED}))
 end
 
 function Spaceship:collides(target)

@@ -4,7 +4,7 @@ function Projectile:init(def)
     self.x = def.x
     self.y = def.y
     self.dir = def.dir
-    self.speed = BULLET_SPEED
+    self.speed = def.spd
     self.size = BULLET_SIZE
     self.lifetime = 0
     self.looping = def.looping

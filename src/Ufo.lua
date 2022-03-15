@@ -20,7 +20,7 @@ function Ufo:init(def)
             if self.x > self.target.x then
                 direction = direction + math.rad(180)
             end
-            table.insert(self.bullets, Projectile({x = self.x + self.width / 2, y = self.y + self.height / 2, dir = direction, looping = false}))
+            table.insert(self.bullets, Projectile({x = self.x + self.width / 2, y = self.y + self.height / 2, dir = direction, looping = false, spd = UFO_BULLET_SPEED}))
             gSounds['shoot']:stop()
             gSounds['shoot']:play()
         end
