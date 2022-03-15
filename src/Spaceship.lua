@@ -121,6 +121,7 @@ function Spaceship:dies()
         Event.dispatch('player_invincible')
         self:updatePosition()
     else
+        gSounds['ufo_flies']:stop()
         GlobalStateMachine:change('game-over', {score = self.score})
     end
 end

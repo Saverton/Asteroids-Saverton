@@ -31,6 +31,7 @@ function PlayState:enter()
     end)
 
     local nextLevelHandler = Event.on('next_level', function(def)
+        self.level.ufo:dies()
         self.level = Level({
             levelNum = def.level,
             player = self.player
