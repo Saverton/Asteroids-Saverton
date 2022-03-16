@@ -14,6 +14,7 @@ function Ufo:init(def)
     self.bullets = {}
     self.dead = def.dead or false
 
+    self.shootTimer = {}
     Timer.every(UFO_SHOOT_EVERY, function()
         if not self.dead then
             local direction = math.atan((self.target.y - self.y) / (self.target.x - self.x))
@@ -24,7 +25,7 @@ function Ufo:init(def)
             gSounds['shoot']:stop()
             gSounds['shoot']:play()
         end
-    end)
+    end):group(self.shootTimer)
 
     gSounds['ufo_flies']:setLooping(true)
     gSounds['ufo_flies']:play()
@@ -75,6 +76,9 @@ end
 
 function Ufo:dies()
     self.dead = true
+    self.x = -100
+    self.y = -100
+    Timer.clear(self.shootTimer)
     self.bullets = {}
     gSounds['ufo_flies']:stop()
     gSounds['ship_explode']:stop()
