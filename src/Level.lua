@@ -11,8 +11,7 @@ function Level:init(def)
     Timer.every(math.max(11 - self.levelNum, 2), function()
         if self.ufo.dead and math.random(3) == 1 then
             self.ufo = Ufo({
-                target = self.player,
-                dead = false
+                target = self.player
             })
         end
     end)

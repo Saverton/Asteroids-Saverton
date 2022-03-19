@@ -3,11 +3,11 @@ Ufo = Class{}
 function Ufo:init(def)
     self.texture = 'ufo'
     self.target = def.target
-    local xLoc = {0, VIRTUAL_WIDTH}
-    self.x = xLoc[math.random(2)]
-    self.y = math.random(VIRTUAL_HEIGHT)
     self.width = 16
     self.height = 16
+    local xLoc = {-self.width, VIRTUAL_WIDTH}
+    self.x = xLoc[math.random(2)]
+    self.y = math.random(VIRTUAL_HEIGHT)
     local dir_table = {-1, 1}
     self.dx = dir_table[math.random(1, 2)] * math.random(25, 50)
     self.dy = dir_table[math.random(1, 2)] * (50 - math.abs(self.dx))
@@ -27,8 +27,10 @@ function Ufo:init(def)
         end
     end):group(self.shootTimer)
 
-    gSounds['ufo_flies']:setLooping(true)
-    gSounds['ufo_flies']:play()
+    if not self.dead then
+        gSounds['ufo_flies']:setLooping(true)
+        gSounds['ufo_flies']:play()
+    end
 end
 
 function Ufo:update(dt)
@@ -62,6 +64,8 @@ function Ufo:update(dt)
             self.y = -self.height
         end
     end
+
+    Timer.update(dt, self.shootTimer)
 end
 
 function Ufo:render()
@@ -76,12 +80,12 @@ end
 
 function Ufo:dies()
     self.dead = true
-    self.x = -100
-    self.y = -100
     Timer.clear(self.shootTimer)
     self.bullets = {}
     gSounds['ufo_flies']:stop()
     gSounds['ship_explode']:stop()
     gSounds['ship_explode']:play()
     Event.dispatch('explode', {x = self.x + self.width / 2, y = self.y + self.height / 2, size = 20})
+    self.x = -100
+    self.y = -100
 end
