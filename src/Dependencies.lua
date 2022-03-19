@@ -1,7 +1,7 @@
 Class = require 'library/class'
 push = require 'library/push'
 Timer = require 'library/knife.timer'
-Event = require 'library/knife.Event'
+Event = require 'library/knife.event'
 
 require 'src/StateMachine'
 require 'src/Util'
